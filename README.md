@@ -7,10 +7,6 @@
 - [Netick](https://github.com/NetickNetworking/NetickForUnity.git)
 - [PlayEveryWare/eos_plugin_for_unity](https://github.com/PlayEveryWare/eos_plugin_for_unity)
 
-**Note**: When downloading `eos_plugin_for_unity`, use `git clone https://github.com/PlayEveryWare/eos_plugin_for_unity` instead of downloading as a zip. The zip version may cause issues with the included DLLs.
-
-**Copy the `Assets/Plugins` folder** from this repository to your Unity project's `Assets/Plugins` folder.
-
 ### Requirements / 系统要求
 
 - Unity version: **2019** or newer
