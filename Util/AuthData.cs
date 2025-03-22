@@ -17,7 +17,7 @@ namespace CocKleBursTransport.Plugins.NetickEOS.Util
         public ExternalCredentialType externalCredentialType = ExternalCredentialType.DeviceidAccessToken;
         public string id;
         public string token;
-        public string displayName = "NetickEOS";
+        public string displayName = "FishyEOS";
         public bool automaticallyCreateDeviceId = true;
         public bool automaticallyCreateConnectAccount = true;
         public AuthScopeFlags authScopeFlags = AuthScopeFlags.NoFlags;
