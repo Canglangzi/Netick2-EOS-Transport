@@ -52,6 +52,7 @@ namespace CocKleBurs.Transport
             _buffer = new BitBuffer(createChunks: false);
             _connections = new Dictionary<int, EpicOnlineServiceTransportConnection>();
             _client = new EpicOnlineServiceTransportConnection() { IsClient = true };
+            
         }
 
         private void OnServerReceivedData(ServerReceivedDataArgs obj)

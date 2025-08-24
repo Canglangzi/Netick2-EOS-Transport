@@ -1,25 +1,14 @@
 {
-  "name": "Netick2-EOS-Transport",
+  "name": "com.canglangzi.netick2-eos-transport",
   "version": "1.0.0",
+  "displayName": "Netick2 EOS Transport",
   "description": "A Netick transport using EOS for networking in a Unity project",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Canglangzi/Netick2-EOS-Transport.git"
-  },
-  "keywords": [
-    "Netick",
-    "EOS",
-    "Transport",
-    "Unity"
-  ],
-  "homepage": "https://github.com/Canglangzi/Netick2-EOS-Transport#readme",
+  "unity": "2021.3",
   "dependencies": {
-    "eos_plugin_for_unity": "git+https://github.com/EOS-Contrib/eos_plugin_for_unity.git",
-    "NetickForUnity": "git+https://github.com/NetickNetworking/NetickForUnity.git"
+   
   },
-  "devDependencies": {}
+  "author": {
+    "name": "Canglangzi",
+    "url": "https://github.com/Canglangzi"
+  }
 }

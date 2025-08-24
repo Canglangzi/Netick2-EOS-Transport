@@ -128,12 +128,18 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
         #region Initialization and unity.
 
+        public void Awake()
+        {
+            Initialize();
+        }
+
         public void Initialize()
         {
             EOS.ClearCachedInterface();
             _client.Initialize(this);
             _clientHost.Initialize(this);
             _server.Initialize(this);
+            
         }
 
         private void OnDestroy()
