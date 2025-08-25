@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using CocKleBursTransport.Plugins.NetickEOS.Util;
 using UnityEngine;
 
 namespace CocKleBursTransport.Transporting.EOSPlugin
@@ -43,19 +44,28 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
         /// </summary>
         private IEnumerator StartClientHostOnServerStart()
         {
-            var timeout = Time.time + 60f;
+            var timeout = Time.time + 60f; 
             while (Time.time < timeout)
             {
-                if (_server.GetLocalConnectionState() == LocalConnectionState.Started)
+                if (_server.GetLocalConnectionState() == LocalConnectionState.Started &&
+                    EOS.GetCachedP2PInterface() != null)
                 {
                     SetLocalConnectionState(LocalConnectionState.Started, false);
                     yield break;
                 }
-                yield return null;
+                yield return new WaitForSeconds(0.5f); 
             }
-            SetLocalConnectionState(LocalConnectionState.Stopped, false);
+          
+            if (_server.GetLocalConnectionState() == LocalConnectionState.Started)
+            {
+                SetLocalConnectionState(LocalConnectionState.Started, false);
+            }
+            else
+            {
+                SetLocalConnectionState(LocalConnectionState.Stopped, false);
+               NetickEOS.Instance.LogError("[ClientHostPeer] LocalConnectionState.Stopped");
+            }
         }
-
         /// <summary>
         /// Sets a new connection state.
         /// </summary>

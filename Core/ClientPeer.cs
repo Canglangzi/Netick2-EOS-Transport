@@ -75,8 +75,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             }
 
             NetickEOS.Instance.Log($"[ClientPeer] Authenticated with EOS Connect. {EOS.LocalProductUserId}");
-
-            // Attempt to connect to Server Remote User Id P2P connection...
+            
             _localUserId = EOS.LocalProductUserId;
             _remoteUserId = ProductUserId.FromString(_transport.RemoteProductUserId);
             _socketId = new SocketId { SocketName = _transport.SocketName };
@@ -146,7 +145,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
             if (result == Result.Success) return true;
 
-            //_transport.NetworkManager.LogError($"[ClientPeer] Failed to close connection. Error: {result}");
+        NetickEOS.Instance.LogError($"[ClientPeer] Failed to close connection. Error: {result}");
             return false;
         }
 
@@ -160,7 +159,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
             _connectionType = data.ConnectionType.ToString();
             base.SetLocalConnectionState(LocalConnectionState.Started, false);
-            //_transport.NetworkManager.Log($"[ClientPeer] Connection to server established. ConnectionType: {_connectionType}");
+            NetickEOS.Instance.Log($"[ClientPeer] Connection to server established. ConnectionType: {_connectionType}");
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             if (_peerConnectionClosedEventHandle.HasValue)
                 EOS.GetCachedP2PInterface().RemoveNotifyPeerConnectionClosed(_peerConnectionClosedEventHandle.Value);
 
-            //_transport.NetworkManager.Log($"[ClientPeer] Connection to server closed.");
+            NetickEOS.Instance.Log($"[ClientPeer] Connection to server closed.");
             StopConnection();
         }
 
@@ -225,8 +224,18 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
         /// </summary>
         private void OnQueryNATType(ref OnQueryNATTypeCompleteInfo data)
         {
+            if (data.ResultCode != Result.Success)
+            {
+                NetickEOS.Instance.LogError($"[ClientPeer] NAT type query failed: {data.ResultCode}");
+                StopConnection();
+                return;
+            }
             _natType = data.NATType.ToString();
-            NetickEOS.Instance.Log($"[{nameof(ClientPeer)}] NATType: {_natType}");
+            NetickEOS.Instance.Log($"[ClientPeer] NAT Type: {_natType}");
+            if (data.NATType == NATType.Unknown)
+            {
+                NetickEOS.Instance.LogWarning("[ClientPeer] Restricted NAT types may cause unstable connections");
+            }
         }
     }
 }
