@@ -43,7 +43,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
         /// </summary>
         private IEnumerator StartClientHostOnServerStart()
         {
-            var timeout = Time.time + 30f;
+            var timeout = Time.time + 60f;
             while (Time.time < timeout)
             {
                 if (_server.GetLocalConnectionState() == LocalConnectionState.Started)

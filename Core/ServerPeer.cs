@@ -86,13 +86,13 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
                 yield return _transport.AuthConnectData.Connect(out var authDataLogin);
                 if (authDataLogin.loginCallbackInfo?.ResultCode != Result.Success)
                 {
-                    //_transport.NetworkManager.LogError($"[ServerPeer] Failed to authenticate with EOS Connect. {authDataLogin.loginCallbackInfo?.ResultCode}");
+                    NetickEOS.Instance.LogError($"[ServerPeer] Failed to authenticate with EOS Connect. {authDataLogin.loginCallbackInfo?.ResultCode}");
                     base.SetLocalConnectionState(LocalConnectionState.Stopped, true);
                     yield break;
                 }
             }
 
-            //_transport.NetworkManager.Log($"[ServerPeer] Authenticated with EOS Connect. {EOS.LocalProductUserId}");
+            NetickEOS.Instance.Log($"[ServerPeer] Authenticated with EOS Connect. {EOS.LocalProductUserId}");
 
             // Attempt to Start Listening for Peer Connections...
             try
@@ -107,11 +107,11 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
                 _acceptPeerConnectionsEventHandle = EOS.GetCachedP2PInterface().AddNotifyPeerConnectionRequest(
                     ref addNotifyPeerConnectionRequestOptions, null, OnPeerConnectionRequest);
 
-                //_transport.NetworkManager.Log($"[ServerPeer] Started listening for incoming connections. Handle #{_acceptPeerConnectionsEventHandle}");
+                NetickEOS.Instance.Log($"[ServerPeer] Started listening for incoming connections. Handle #{_acceptPeerConnectionsEventHandle}");
             }
             catch (Exception e)
             {
-                //_transport.NetworkManager.LogError($"[ServerPeer] Failed to start listening for incoming connections. {e}");
+                NetickEOS.Instance.LogError($"[ServerPeer] Failed to start listening for incoming connections. {e}");
                 base.SetLocalConnectionState(LocalConnectionState.Stopped, true);
                 yield break;
             }
@@ -145,10 +145,11 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             };
             var acceptConnectionResult = EOS.GetCachedP2PInterface().AcceptConnection(ref acceptConnectionOptions);
 
+            // 示例：在ServerPeer接受连接失败时添加日志
             if (acceptConnectionResult != Result.Success)
             {
                 _clients.Remove(clientConnection);
-                //_transport.NetworkManager.LogError($"[ServerPeer] Failed to accept connection from {data.RemoteUserId} with handle #{data.SocketId} and connection id {nextId}. {acceptConnectionResult}");
+                Debug.LogError($"[ServerPeer]: {acceptConnectionResult}，RemoteUserId: {data.RemoteUserId}");
             }
         }
 
@@ -199,7 +200,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
             _transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(RemoteConnectionState.Started,
                 clientConnection.Id, _transport.Index));
-            //_transport.NetworkManager.Log($"[ServerPeer.OnPeerConnectionEstablished] Established connection from {data.RemoteUserId} with handle #{data.SocketId} and connection id {clientConnection.Id}.");
+            NetickEOS.Instance.Log($"[ServerPeer.OnPeerConnectionEstablished] Established connection from {data.RemoteUserId} with handle #{data.SocketId} and connection id {clientConnection.Id}.");
         }
 
         /// <summary>
@@ -229,7 +230,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
             _transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(RemoteConnectionState.Stopped,
                 clientConnection.Value.Id, _transport.Index));
-            //_transport.NetworkManager.Log($"[ServerPeer.OnPeerConnectionClosed] Closed connection from {data.RemoteUserId} with handle #{data.SocketId} and connection id {clientConnection.Value.Id}.");
+            NetickEOS.Instance.Log($"[ServerPeer.OnPeerConnectionClosed] Closed connection from {data.RemoteUserId} with handle #{data.SocketId} and connection id {clientConnection.Value.Id}.");
             
             _clients.Remove(clientConnection.Value);
         }
@@ -281,7 +282,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             }
             catch (Exception e)
             {
-                //_transport.NetworkManager.LogError($"[ServerPeer] Failed to stop listening for incoming connections. {e}");
+                NetickEOS.Instance.LogError($"[ServerPeer] Failed to stop listening for incoming connections. {e}");
                 base.SetLocalConnectionState(LocalConnectionState.Stopped, true);
                 return false;
             }
@@ -402,17 +403,17 @@ index++;
 
                 if (result == Result.NoConnection || result == Result.InvalidParameters)
                 {
-                    //_transport.NetworkManager.Log($"Connection to {connectionId} was lost.");
+                    NetickEOS.Instance.Log($"Connection to {connectionId} was lost.");
                     StopConnection(connectionId);
                 }
                 else if (result != Result.Success)
                 {
-                    //_transport.NetworkManager.LogError($"Could not send: {result}");
+                    NetickEOS.Instance.LogError($"Could not send: {result}");
                 }
             }
             else
             {
-                //_transport.NetworkManager.LogError($"ConnectionId {connectionId} does not exist, data will not be sent.");
+                NetickEOS.Instance.LogError($"ConnectionId {connectionId} does not exist, data will not be sent.");
             }
         }
 

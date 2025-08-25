@@ -126,8 +126,39 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
 
         #endregion
 
+        
         #region Initialization and unity.
 
+        public bool UnityDebug;
+
+        public  void Log(string format, params object[] args)
+        {
+            if (UnityDebug)
+            {
+                string message = args.Length > 0 ? string.Format(format, args) : format;
+                Debug.Log(message);
+                
+            }
+        }
+    
+        public void LogError(string format, params object[] args)
+        {
+            if (UnityDebug)
+            {
+                string message = args.Length > 0 ? string.Format(format, args) : format;
+                Debug.LogError(message);
+            }
+        }
+    
+        public  void LogWarning(string format, params object[] args)
+        {
+            if (UnityDebug)
+            {
+                string message = args.Length > 0 ? string.Format(format, args) : format;
+                Debug.LogWarning(message);
+            }
+        }
+  
         public void Awake()
         {
             Initialize();
@@ -136,10 +167,9 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
         public void Initialize()
         {
             EOS.ClearCachedInterface();
-            _client.Initialize(this);
             _clientHost.Initialize(this);
+            _client.Initialize(this);
             _server.Initialize(this);
-            
         }
 
         private void OnDestroy()

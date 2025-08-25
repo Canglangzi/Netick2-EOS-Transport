@@ -68,13 +68,13 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
                 yield return _transport.AuthConnectData.Connect(out var authDataLogin);
                 if (authDataLogin.loginCallbackInfo?.ResultCode != Result.Success)
                 {
-                    //_transport.NetworkManager.LogError($"[ClientPeer] Failed to authenticate with EOS Connect. {authDataLogin.loginCallbackInfo?.ResultCode}");
+                    NetickEOS.Instance.LogError($"[ClientPeer] Failed to authenticate with EOS Connect. {authDataLogin.loginCallbackInfo?.ResultCode}");
                     base.SetLocalConnectionState(LocalConnectionState.Stopped, true);
                     yield break;
                 }
             }
 
-            //_transport.NetworkManager.Log($"[ClientPeer] Authenticated with EOS Connect. {EOS.LocalProductUserId}");
+            NetickEOS.Instance.Log($"[ClientPeer] Authenticated with EOS Connect. {EOS.LocalProductUserId}");
 
             // Attempt to connect to Server Remote User Id P2P connection...
             _localUserId = EOS.LocalProductUserId;
@@ -115,7 +115,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             if (acceptConnectionResult != Result.Success)
             {
                 base.SetLocalConnectionState(LocalConnectionState.Stopped, false);
-                //_transport.NetworkManager.LogError($"[{nameof(ClientPeer)}] AcceptConnection failed with error: {acceptConnectionResult}");
+               NetickEOS.Instance.LogError($"[{nameof(ClientPeer)}] AcceptConnection failed with error: {acceptConnectionResult}");
                 StopConnection();
                 yield break;
             }
@@ -211,12 +211,12 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
             var result = Send(_localUserId, _remoteUserId, _socketId, channelId, segment);
             if (result == Result.NoConnection || result == Result.InvalidParameters)
             {
-                //_transport.NetworkManager.Log($"[ClientPeer] Connection to server was lost.");
+                NetickEOS.Instance.Log($"[ClientPeer] Connection to server was lost.");
                 StopConnection();
             }
             else if (result != Result.Success)
             {
-                //_transport.NetworkManager.LogError($"[ClientPeer] Could not send: {result}");
+                NetickEOS.Instance.LogError($"[ClientPeer] Could not send: {result}");
             }
         }
 
@@ -226,7 +226,7 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
         private void OnQueryNATType(ref OnQueryNATTypeCompleteInfo data)
         {
             _natType = data.NATType.ToString();
-            //_transport.NetworkManager.Log($"[{nameof(ClientPeer)}] NATType: {_natType}");
+            NetickEOS.Instance.Log($"[{nameof(ClientPeer)}] NATType: {_natType}");
         }
     }
 }

@@ -147,7 +147,6 @@ namespace CocKleBurs.Transport
                     NetickEOS.Instance.StartConnection(true);
                     break;
                 case RunMode.Client:
-                    
                     break;
             }
         }
