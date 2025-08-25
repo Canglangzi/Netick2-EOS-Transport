@@ -6,6 +6,7 @@ using UnityEngine;
 namespace CocKleBursTransport.Transporting.EOSPlugin
 {
     [AddComponentMenu("Netick/Transport/NetickEOS")]
+    [UnityEngine.DefaultExecutionOrder(-1000)] 
     public class NetickEOS : MonoBehaviour
     {
         private static NetickEOS _instance;
@@ -17,7 +18,6 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
                 if (!_instance)
                 {
                     GameObject obj = new GameObject("NetickEOS");
-                    DontDestroyOnLoad(obj);
                     _instance = obj.AddComponent<NetickEOS>();
                 }
 
@@ -161,17 +161,31 @@ namespace CocKleBursTransport.Transporting.EOSPlugin
   
         public void Awake()
         {
+            if (_instance == null)
+            {
+                _instance = this;
+            }
             Initialize();
         }
-
+        
         public void Initialize()
         {
             EOS.ClearCachedInterface();
-            _clientHost.Initialize(this);
+            var platform = EOS.GetPlatformInterface();
+            if (platform == null)
+            {
+                Debug.LogError("EOS Platform Interface");
+            }
+            var p2p = EOS.GetCachedP2PInterface();
+            if (p2p == null)
+            {
+                Debug.LogError("EOS P2P Interface");
+            }
+
             _client.Initialize(this);
+            _clientHost.Initialize(this);
             _server.Initialize(this);
         }
-
         private void OnDestroy()
         {
             Shutdown();

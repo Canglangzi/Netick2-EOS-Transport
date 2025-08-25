@@ -18,7 +18,7 @@ namespace CocKleBurs.Transport
         public int Id;
 
         public override IEndPoint EndPoint => default;
-        public override int Mtu => NetickEOS.Instance.GetMTU(0);
+        public override int Mtu => NetickEOS.Instance?.GetMTU(0) ?? 1200; 
 
         public override void Send(IntPtr ptr, int length)
         {
